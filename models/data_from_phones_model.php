@@ -15,6 +15,5 @@ namespace controllers;
            );
            return $results;
        }
-   
     }
 ?>

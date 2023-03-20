@@ -12,4 +12,5 @@ namespace controllers;
             $results = $this -> insertDataFileFromPhone($accelerometer_datafile);
             return $results;
         }
+    }
 ?>

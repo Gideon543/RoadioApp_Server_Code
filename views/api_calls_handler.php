@@ -5,7 +5,7 @@ namespace controllers;
     /**
 	* Validating the availability of all parameters
 	*@param $params
-    **/
+ 	**/
 
     function areParametersAvailable($params){
 
@@ -42,18 +42,14 @@ namespace controllers;
  	// and with this parameter we are concluding that it is an api call
     if(isset($_GET['apicall'])){
 
-    	switch($_GET['apicall']){
+    	if ($_GET['apicall'] == "createDatafile"){
 
-    	// CREATE OPERATION
-    	// If the api call value is createDatafile
-    	// We will create a record in the database
-    	case 'createDatafile':
     		// Check if the parameters required for this request are available or not
     		areParametersAvailable((array('accelerometer_datafile')));
 
     		// Creating a new record in the database
     		$dataFromPhonesObj = new DataFromPhonesController();
-    		$result = $dataFromPhonesObj->addDataFromPhones($_POST['accelerometer_datafile']);
+    		$result = $dataFromPhonesObj->addDataFileFromPhone($_GET['accelerometer_datafile']);
 
     		// If the record is created, add a success message to response
     		if($result){
@@ -62,11 +58,18 @@ namespace controllers;
 
     			// Add success message to the response
     			$response['message'] = 'File added successfully';
+    		} else{
+    			 //if record is not added that means there is an error 
+ 				$response['error'] = true; 
+ 
+ 				//and we have the error message
+ 				$response['message'] = 'Some error occurred please try again';
     		}
-    		break;
     	}
     }
-   
-   	// Displaying the response in json structure 
+
+    // Displaying the response in json structure 
  	echo json_encode($response);
+
+
 ?>
