@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Roadio Capstone Website</title>
+    <link rel="stylesheet" type="text/css" href="roadio.css">
+
+	<title>Road Condition Data</title>
+	<style>
+		table, th, td {
+			border: 1px solid rgb(0, 0, 0);
+			border-collapse: collapse;
+			padding: 5px;
+		}
+	</style>
+</head>
+<body>
+	<h1>Road Condition Data</h1>
+	<p>Click the button to display road segments:</p>
+	<button onclick="getRoadSegments()">Get Road Segments</button>
+	<table id="roadSegmentsTable">
+		<thead>
+			<tr>
+				<th>Road Segment ID</th>
+				<th>Start GPS Coordinates</th>
+				<th>End GPS Coordinates</th>
+				<th>Point</th>
+				<th>Roughness Index</th>
+				<th>Road ID</th>
+				<th>Timestamp</th>
+			</tr>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+
+    <div class="filter-tabs">
+        <button class="active" onclick="filterTab(event, 'road-segments')">Road Segments</button>
+        <button onclick="filterTab(event, 'drivers-phones')">Drivers Phones</button>
+        <button onclick="filterTab(event, 'phone-accelerometer-data')">Phone Accelerometer Data</button>
+        <button onclick="filterTab(event, 'road-condition-data')">Road Condition Data</button>
+        <button onclick="filterTab(event, 'roughness-index')">Roughness Index</button>
+        <button onclick="filterTab(event, 'roads')">Roads</button>
+      </div>
+      
+      <div id="road-segments" class="tab-content">
+        <!-- Road Segments Table Here -->
+      </div>
+      
+      <div id="drivers-phones" class="tab-content" style="display:none">
+        <!-- Drivers Phones Table Here -->
+      </div>
+      
+      <div id="phone-accelerometer-data" class="tab-content" style="display:none">
+        <!-- Phone Accelerometer Data Table Here -->
+      </div>
+      
+      <div id="road-condition-data" class="tab-content" style="display:none">
+        <!-- Road Condition Data Table Here -->
+      </div>
+      
+      <div id="roughness-index" class="tab-content" style="display:none">
+        <!-- Roughness Index Table Here -->
+      </div>
+      
+      <div id="roads" class="tab-content" style="display:none">
+        <!-- Roads Table Here -->
+      </div>
+
+      
+	<script>
+		function getRoadSegments() {
+            //page displays a table with the road segment data, and includes a button that calls a JavaScript function to fetch the data from the server and populate the table. You would need to replace the URL in the fetch call with the appropriate endpoint for your server.
+			fetch('http://localhost:3000/roadsegments')
+				.then(response => response.json())
+				.then(data => {
+					let tableBody = document.querySelector('#roadSegmentsTable tbody');
+					tableBody.innerHTML = '';
+					data.forEach(segment => {
+						let row = document.createElement('tr');
+						row.innerHTML = `
+							<td>${segment.segment_id}</td>
+							<td>${segment.start_gps_coords}</td>
+							<td>${segment.end_gps_coords}</td>
+							<td>${segment.point}</td>
+							<td>${segment.roughness_index}</td>
+							<td>${segment.road_id}</td>
+							<td>${segment.timestamp}</td>
+						`;
+						tableBody.appendChild(row);
+					});
+				})
+				.catch(error => console.error(error));
+		}
+        
+	</script>
+
+    
+
+    
+</body>
+</html>
