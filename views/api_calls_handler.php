@@ -1,12 +1,12 @@
 <?php
 namespace controllers;
     require __DIR__."/../controllers/data_from_phones_controller.php";
+    require __DIR__."/../controllers/machine_learning_models.php";
 
     /**
 	* Validating the availability of all parameters
 	*@param $params
  	**/
-
     function areParametersAvailable($params){
 
     	$available = true;
@@ -45,26 +45,51 @@ namespace controllers;
     	if ($_GET['apicall'] == "createDatafile"){
 
     		// Check if the parameters required for this request are available or not
-    		areParametersAvailable((array('accelerometer_datafile')));
+    		areParametersAvailable((array('Z_Mean', 'Z_Variance', 'Z_Deviation', 'Z_Peak', 'Z_Low')));
 
-    		// Creating a new record in the database
-    		$dataFromPhonesObj = new DataFromPhonesController();
-    		$result = $dataFromPhonesObj->addDataFileFromPhone($_GET['accelerometer_datafile']);
+
+            // Get the Z-Values from the POST request an pass them through the ML model -in this case Logistic Regression
+            $model = new MachineLearningModels();
+            $prediction = $model ->logisticRegressionModel(
+                    $_POST['Z_Mean'],
+                    $_POST['Z_Variance'],
+                    $_POST['Z_Deviation'],
+                    $_POST['Z_Peak'],
+                    $_POST['Z_Low']
+            );
+
+
+            // There was no error while creating the record
+            $response['error'] = false;
+
+            // Add success message to the response
+            $response['message'] = 'File added successfully';
+
+            // Add success message to the response
+            $response['prediction'] = $prediction;
+
+    		// // Creating a new record in the database
+    		// $dataFromPhonesObj = new DataFromPhonesController();
+    		// $result = $dataFromPhonesObj->addDataFileFromPhone($_GET['accelerometer_datafile']);
 
     		// If the record is created, add a success message to response
-    		if($result){
-    			// There was no error while creating the record
-    			$response['error'] = false;
+    	// 	if($prediction){
+    	// 		// There was no error while creating the record
+    	// 		$response['error'] = false;
 
-    			// Add success message to the response
-    			$response['message'] = 'File added successfully';
-    		} else{
-    			 //if record is not added that means there is an error 
- 				$response['error'] = true; 
+    	// 		// Add success message to the response
+    	// 		$response['message'] = 'File added successfully';
+
+     //            // Add success message to the response
+     //            $response['prediction'] = $prediction;
+
+    	// 	} else{
+    	// 		 //if record is not added that means there is an error 
+ 				// $response['error'] = true; 
  
- 				//and we have the error message
- 				$response['message'] = 'Some error occurred please try again';
-    		}
+ 				// //and we have the error message
+ 				// $response['message'] = 'Some error occurred please try again';
+    	// 	}
     	}
     }
 

@@ -2,13 +2,13 @@
 namespace controllers;
     require __DIR__."/../config/database_connection.php";
 
-    class DataFromPhonesModel extends DatabaseConnection{
+    class RoadSegmentModel extends DatabaseConnection{
         /**
         * CREATE OPERATION
         * Defines the INSERT querry to put the data from the android devices in the database.
         * @param accelerometer_datafile - data from android devices
         **/
-        protected function insertDataFileFromPhone($accelerometer_datafile){
+        protected function insertRoadSegment($accelerometer_datafile){
             $results = mysqli_query($this -> connect(),
             "INSERT INTO `datafromphones`(`accelerometer_file`) 
              VALUES ('$accelerometer_datafile')"
@@ -21,7 +21,7 @@ namespace controllers;
         * Defines the GET querry to fetch data from the android devices stored in the database.
         * @param accelerometer_datafile - data from android devices
         **/
-        protected function getDataFileFromDatabase($accelerometer_datafile){
+        protected function getRoadSegments($accelerometer_datafile){
             $results = mysqli_query($this -> connect(),
             "SELECT * FROM `datafromphones`"
            );
