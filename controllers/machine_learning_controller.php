@@ -39,15 +39,10 @@ namespace controllers;
         /**
         * Neural Network based model
         * @param $params - captures the values of the input vector
+        **/
         public function NNModel ($params){
           
         }
-
-
-        /**
-        *
-        **/
-
 
     }
 ?>

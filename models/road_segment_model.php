@@ -1,67 +1,90 @@
 <?php
-namespace controllers;
-    require __DIR__."/../config/database_connection.php";
+  namespace controllers;
+    require_once __DIR__."/../config/database_connection.php";
 
     class RoadSegmentModel extends DatabaseConnection{
         /**
         * CREATE OPERATION
-        * Defines the INSERT querry to put the data from the android devices in the database.
-        * @param accelerometer_datafile - data from android devices
-          "INSERT INTO `datafromphones`(`accelerometer_file`) 
-          VALUES ('$accelerometer_datafile')"
+        * Interacts with database to create a road segment
+        * @param GPS Point (latitiude, longitude), roughness index of GPS Point, radius of road segment
         **/
-        protected function insertRoadSegment($latitiude, $longitude){
+        protected function insertRoadSegment($latitude, $longitude, $roughness_index, $radius){
+          $results = mysqli_query($this -> connect(),
+          "INSERT INTO `road_segments` (`road_segment_circle`, `segment_roughness_index`) 
+           VALUES (ST_Buffer(POINT($latitude, $longitude), $radius), $roughness_index)"
+          );
+          return $results;
+       }
+
+        /**
+        * GET OPERATION
+        * Interracts with database to fetch all road segments.
+        **/
+        protected function getAllRoadSegments(){
             $results = mysqli_query($this -> connect(),
-            "INSERT INTO circles (id, circle) 
-            VALUES (ST_Buffer(POINT('$latitude','$longitude'), 5))"
+            "SELECT * FROM `road_segments`"
            );
            return $results;
        }
 
         /**
         * GET OPERATION
-        * Defines the GET querry to fetch data from the android devices stored in the database.
-        * @param accelerometer_datafile - data from android devices
+        * Interracts with database get the most occuring roughness index of all the points within a segment.
+        * @param The ID of the road segment
         **/
-        protected function getRoadSegments($accelerometer_datafile){
+        protected function getFrequentRoughnessIndexForSegment($road_segment_id){
+            $results = mysqli_query($this->connect(),
+                "SELECT `roughness_index`, COUNT(*) as `count` FROM `road_datapoints`
+                JOIN `road_segments` 
+                ON ST_Contains(road_segments.road_segment_circle, road_datapoints.road_datapoint)
+                WHERE `road_segments`.`road_segment_id` = $road_segment_id
+                GROUP BY `roughness_index`
+                ORDER BY `count` DESC
+                LIMIT 1"
+            );
+            return $results;
+        }
+
+        /**
+        * UPDATE OPERATION
+        * Interracts with database to update the roughness index of a road segment
+        * @param The ID of the road segment, new roughness index value.
+        **/
+        protected function updateRoughnessIndexForSegment($road_segment_id, $new_roughness_index){
+          $results = mysqli_query($this -> connect(),
+            "UPDATE `road_segments` SET `segment_roughness_index` = $new_roughness_index 
+             WHERE `road_segment_id` = $road_segment_id"
+          );
+          return $results;
+        }
+
+        /**
+        * SPATIAL JOIN OPERATION
+        * Interracts with database to fetch all road datapoints associated with a road segment.
+        *@param The ID of the road segement
+        **/
+        protected function getRoadDatapointsForSegment($road_segment_id){
+            $results = mysqli_query($this->connect(),
+                "SELECT * FROM `road_datapoints`
+                JOIN `road_segments` 
+                ON ST_Contains(road_segments.road_segment_circle, road_datapoints.road_datapoint)
+                WHERE `road_segments`.`road_segment_id` = $road_segment_id"
+            );
+            return $results;
+        }
+        
+        /**
+        * CHECK OPERATION
+        * Checks if a road datapoint is within the circular polygon defined for a road segment
+        * @param GPS point (latitude, longitude)
+        **/
+        protected function isWithinRoadSegment($latitiude, $longitude){
             $results = mysqli_query($this -> connect(),
-            "SELECT * FROM `datafromphones`"
+            "SELECT * FROM `road_segments` 
+             WHERE ST_Contains(road_segment_circle, ST_GeomFromText('POINT($latitiude $longitude)'))"
            );
            return $results;
        }
 
     }
 ?>
-
-/*
-* -- phone accelerometer and GPS data
-CREATE TABLE phone_accelerometer_data (
-  data_id PRIMARY KEY AUTO_INCREMENT,
-  acceleration_zmean FLOAT,
-  acceleration_zstd FLOAT,
-  acceleration_zvariance FLOAT,
-  acceleration_zpeak FLOAT,
-  acceleration_zlow FLOAT,
-  latitude FLOAT,
-  longitude FLOAT,
-  time_recorded TIMESTAMP
-);
-
--- create circular road segments
-CREATE TABLE road_segments (
-  road_segment_id INTEGER PRIMARY KEY AUTO_INCREMENT,
-  road_segment_circle GEOMETERY,
-  segment_roughness_index INTEGER,
-);
- 
--- road datapoints that make up a segment
-CREATE TABLE road_datapoints(
-  road_datapoint_id INTEGER PRIMARY KEY,
-  road_datapoint GEOMETERY,
-  roughness_index INTEGER,
-  road_segment_id INTEGER,
-  time_recorded TIMESTAMP,
-  FOREIGN KEY (road_segment_id) REFERENCES road_segments(road_segment_id)
-);
-*
-*/

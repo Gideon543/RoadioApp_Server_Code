@@ -1,6 +1,6 @@
 <?php
 namespace controllers;
-    require __DIR__."/../config/database_connection.php";
+    require_once __DIR__."/../config/database_connection.php";
 
     class DataFromPhonesModel extends DatabaseConnection{
         /**

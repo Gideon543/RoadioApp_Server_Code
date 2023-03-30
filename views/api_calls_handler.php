@@ -1,7 +1,7 @@
 <?php
 namespace controllers;
     require __DIR__."/../controllers/data_from_phones_controller.php";
-    require __DIR__."/../controllers/machine_learning_models.php";
+    require __DIR__."/../controllers/machine_learning_controller.php";
 
     /**
 	* Validating the availability of all parameters

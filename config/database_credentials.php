@@ -4,5 +4,5 @@
     define("SERVERNAME", "localhost");
     define("USERNAME", "root");
     define("PASSWORD", "");
-    define("DATABASE", "accelerometer_readings");
+    define("DATABASE", "roadio_db");
 ?>
