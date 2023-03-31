@@ -3,14 +3,13 @@
 	require_once __DIR__."/road_datapoint_controller.php";
 	require_once __DIR__."/road_segment_controller.php";
 
-	if (!defined('SERVERNAME')) {
-    define('SERVERNAME', 'localhost');}
-
 	/**
 	* Aggregates the roughness index from different road datapoints within a segment
 	*@param GPS location (latitude, longitude), Roughness index at that GPS location
 	*/
 	function aggregateRoadDatapoints($latitude, $longitude, $roughness_index){
+
+		$message = "Success";
 
 		// Initialize the services necessary for the aggregation task
 		$road_segment = new RoadSegmentController();
@@ -33,17 +32,13 @@
 			// Update the roughness index of the road segment with the most occuring index
 			$road_segment ->changeRoughnessIndexOfSegment($road_segment_id, $frequent_roughness_index[0]['roughness_index']);
 
-			echo "Aggregation completed!";
-
 		// If the point is not within any segment, then this GPS location should be a a new road segment
 		} else{
 			// Create a new road segment for the GPS point
 			$road_segment ->addRoadSegment ($latitude, $longitude, $roughness_index, 2);
-
-			echo "New road segment added successfully!";
 		}
-	}
 
-	aggregateRoadDatapoints(6,8,0);
+		return $message;
+	}
 ?>
 

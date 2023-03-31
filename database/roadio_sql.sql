@@ -21,7 +21,7 @@ CREATE TABLE road_datapoints(
   FOREIGN KEY (road_segment_id) REFERENCES road_segments(road_segment_id)
 );
 
-
+-- NOT USED AT THE MOMENT
 -- phone accelerometer and GPS data
 CREATE TABLE phone_accelerometer_data (
   data_id PRIMARY KEY AUTO_INCREMENT,

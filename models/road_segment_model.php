@@ -22,7 +22,7 @@
         **/
         protected function getAllRoadSegments(){
             $results = mysqli_query($this -> connect(),
-            "SELECT * FROM `road_segments`"
+            "SELECT ST_AsText(`road_segment_circle`), `segment_roughness_index` FROM `road_segments`"
            );
            return $results;
        }

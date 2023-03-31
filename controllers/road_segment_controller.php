@@ -21,6 +21,15 @@ namespace controllers;
             $results = $this -> isWithinRoadSegment($latitiude, $longitude);
             return mysqli_fetch_all($results, MYSQLI_ASSOC);
         }
+        
+        /**
+        * Provides a service that fetches all road segment data from the database
+        * @param No parameter
+        **/
+        public function getRoadSegments (){
+            $results = $this -> getAllRoadSegments();
+            return mysqli_fetch_all($results, MYSQLI_ASSOC);
+        }
 
         /**
         * Provides a service that gets all the road datapoints within a road segment
