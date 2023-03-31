@@ -9,7 +9,8 @@
 	*/
 	function aggregateRoadDatapoints($latitude, $longitude, $roughness_index){
 
-		$message = "Success";
+		// Radius of road segment
+		$road_segment_radius = 2
 
 		// Initialize the services necessary for the aggregation task
 		$road_segment = new RoadSegmentController();
@@ -35,10 +36,10 @@
 		// If the point is not within any segment, then this GPS location should be a a new road segment
 		} else{
 			// Create a new road segment for the GPS point
-			$road_segment ->addRoadSegment ($latitude, $longitude, $roughness_index, 2);
+			$road_segment ->addRoadSegment ($latitude, $longitude, $roughness_index, $road_segment_radius);
 		}
 
-		return $message;
+		return "Success";
 	}
 ?>
 

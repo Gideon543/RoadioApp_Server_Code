@@ -54,7 +54,7 @@ namespace controllers;
             $model = new MachineLearningModels();
 
             // Get the Z-Values from the POST request an pass them through the ML model -in this case Logistic Regression
-            $prediction = $model ->logisticRegressionModel($_POST['Z_Mean'], $_POST['Z_Variance'], $_POST['Z_Deviation'], $_POST['Z_Peak'], $_POST['Z_Low']);
+            $prediction = $model ->logisticRegressionModel(1, $_POST['Z_Mean'], $_POST['Z_Variance'], $_POST['Z_Deviation'], $_POST['Z_Peak'], $_POST['Z_Low']);
 
             // Creating a new record in the database
             $messageFromOperation = aggregateRoadDatapoints($latitude, $longitude, $prediction);

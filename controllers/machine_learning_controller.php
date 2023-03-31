@@ -10,23 +10,33 @@ namespace controllers;
         * @param $Z_Mean, $Z_Variance, $Z_Deviation, $Z_Peak, $Z_Low (produced from mobile devices)
         * @return Returns a classification.
         **/
-        public function logisticRegressionModel ($Z_Mean, $Z_Variance, $Z_Deviation, $Z_Peak, $Z_Low){
+
+        public function logisticRegressionModel ($value_1, $Z_Mean, $Z_Variance, $Z_Deviation, $Z_Peak, $Z_Low){
 
             // Calculated for each individual parameter (based on the work of Kwabena - 87% accruacy)
+            // Good Vs Bad/Fair
             $theta_1 = 38.388669;
             $theta_2 = -1.658378;
             $theta_3 = 4.517424;
             $theta_4 = -23.416034;
-            $theta_5 = -1.711021;
-
+            $theta_5 = 0.305482;
+            $theta_6 = -1.711021;
 
             // Developing a hypothesis function based on both the parameters and weights
-            $h = ($theta_1 * $Z_Mean) + ($theta_2 * $Z_Variance) + ($theta_3 * $Z_Deviation) + ($theta_2 * $Z_Peak) + ($theta_2 * $Z_Low);
+            $h1 = ($theta_1 * $value_1) + ($theta_2 * $Z_Mean) + ($theta_3 * $Z_Variance) + ($theta_4 * $Z_Deviation) + ($theta_5 * $Z_Peak) + ($theta_6 * $Z_Low);
+
 
             // Passing prediction through a sigmoid function and returning the result
-            return 1 / (1 + exp(-$h));
-        }
+            $prediction = 1 / (1 + exp(-$h1));
 
+            // Evaluatin the prediction from the model
+            if($prediction < 0.5){
+                return 2; // Bad Roads
+            
+            } else if($prediction >= 0.5) {
+                return 6; // Good Roads
+            }
+        }
         
         /**
         * Decision tree model
@@ -45,4 +55,7 @@ namespace controllers;
         }
 
     }
+
+    $model = new MachineLearningModels();
+    echo $model->logisticRegressionModel(1,9.524368625,0.6896756580932846,0.8304671324581633,11.413852,6.973618);
 ?>
