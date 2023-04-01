@@ -53,9 +53,5 @@ namespace controllers;
         public function NNModel ($params){
           
         }
-
     }
-
-    $model = new MachineLearningModels();
-    echo $model->logisticRegressionModel(1,9.524368625,0.6896756580932846,0.8304671324581633,11.413852,6.973618);
 ?>

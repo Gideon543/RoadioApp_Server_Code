@@ -10,7 +10,7 @@
 	function aggregateRoadDatapoints($latitude, $longitude, $roughness_index){
 
 		// Radius of road segment
-		$road_segment_radius = 2
+		$road_segment_radius = 2;
 
 		// Initialize the services necessary for the aggregation task
 		$road_segment = new RoadSegmentController();
@@ -19,6 +19,7 @@
 		//Check if the GPS location is within the boundary of any road segment
 		$segments = $road_segment -> hasRoadSegment($latitude, $longitude);
 		if($segments){
+			// Get first segment
 			$first_segment = reset($segments);
 			
 			// Get segment id of the first road segment the point falls within
