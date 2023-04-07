@@ -8,14 +8,14 @@ USE Roadio_DB;
 CREATE TABLE road_segments (
   road_segment_id INTEGER PRIMARY KEY AUTO_INCREMENT,
   road_segment_circle GEOMETRY,
-  segment_roughness_index INTEGER
+  segment_surface_quality INTEGER
 );
  
 -- road datapoints that make up a segment
 CREATE TABLE road_datapoints(
   road_datapoint_id INTEGER PRIMARY KEY AUTO_INCREMENT,
   road_datapoint GEOMETRY,
-  roughness_index INTEGER,
+  surface_quality INTEGER,
   road_segment_id INTEGER,
   time_recorded TIMESTAMP,
   FOREIGN KEY (road_segment_id) REFERENCES road_segments(road_segment_id)

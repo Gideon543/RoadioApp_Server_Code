@@ -24,10 +24,10 @@ namespace controllers;
                 $response['error'] = false;
 
                 // Add success message to the response
-                $response['message'] = 'Road datapoints retreived successfully!';
+                $response['message'] = 'Road segments retreived successfully!';
 
                 // Put the data retreived from the database in the response
-                $response['datapoints'] = $resultsFromOperation;
+                $response['road_segments'] = $resultsFromOperation;
 
             } else{
                  //if record is not added that means there is an error 

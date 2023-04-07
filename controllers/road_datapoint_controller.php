@@ -13,5 +13,13 @@ namespace controllers;
             return $results;
         }
 
+        /**
+        * Provides a service that interracts with the model file to fetch road data points from an associated segment.
+        * @param No parameter
+        **/
+        public function getRoadDatapoints (){
+            $results = $this -> fetchRoadDatapoint();
+            return mysqli_fetch_all($results, MYSQLI_ASSOC);
+        }
     }
 ?>

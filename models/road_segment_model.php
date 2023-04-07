@@ -10,7 +10,7 @@
         **/
         protected function insertRoadSegment($latitude, $longitude, $roughness_index, $radius){
           $results = mysqli_query($this -> connect(),
-          "INSERT INTO `road_segments` (`road_segment_circle`, `segment_roughness_index`) 
+          "INSERT INTO `road_segments` (`road_segment_circle`, `segment_surface_quality`) 
            VALUES (ST_Buffer(POINT($latitude, $longitude), $radius), $roughness_index)"
           );
           return $results;
@@ -22,7 +22,7 @@
         **/
         protected function getAllRoadSegments(){
             $results = mysqli_query($this -> connect(),
-            "SELECT ST_AsText(`road_segment_circle`), `segment_roughness_index` FROM `road_segments`"
+            "SELECT ST_AsText(`road_segment_circle`), `segment_surface_quality` FROM `road_segments`"
            );
            return $results;
        }
@@ -34,11 +34,11 @@
         **/
         protected function getFrequentRoughnessIndexForSegment($road_segment_id){
             $results = mysqli_query($this->connect(),
-                "SELECT `roughness_index`, COUNT(*) as `count` FROM `road_datapoints`
+                "SELECT `surface_quality`, COUNT(*) as `count` FROM `road_datapoints`
                 JOIN `road_segments` 
                 ON ST_Contains(road_segments.road_segment_circle, road_datapoints.road_datapoint)
                 WHERE `road_segments`.`road_segment_id` = $road_segment_id
-                GROUP BY `roughness_index`
+                GROUP BY `surface_quality`
                 ORDER BY `count` DESC
                 LIMIT 1"
             );
@@ -52,7 +52,7 @@
         **/
         protected function updateRoughnessIndexForSegment($road_segment_id, $new_roughness_index){
           $results = mysqli_query($this -> connect(),
-            "UPDATE `road_segments` SET `segment_roughness_index` = $new_roughness_index 
+            "UPDATE `road_segments` SET `segment_surface_quality` = $new_roughness_index 
              WHERE `road_segment_id` = $road_segment_id"
           );
           return $results;
