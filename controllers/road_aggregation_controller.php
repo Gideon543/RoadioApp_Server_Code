@@ -32,7 +32,7 @@
 			$frequent_roughness_index = $road_segment ->getMostOccuringRoughnessIndex($road_segment_id);
 
 			// Update the roughness index of the road segment with the most occuring index
-			$road_segment ->changeRoughnessIndexOfSegment($road_segment_id, $frequent_roughness_index[0]['roughness_index']);
+			$road_segment ->changeRoughnessIndexOfSegment($road_segment_id, $frequent_roughness_index[0]['surface_quality']);
 
 		// If the point is not within any segment, then this GPS location should be a a new road segment
 		} else{
