@@ -23,7 +23,7 @@ namespace controllers;
         **/
         protected function fetchRoadDatapoint(){
             $results = mysqli_query($this -> connect(),
-            "SELECT ST_AsText(`road_datapoint`), `surface_quality` FROM `road_datapoints`"
+            "SELECT ST_AsText(`road_datapoint`) as `road_datapoint`, `surface_quality` FROM `road_datapoints`"
            );
            return $results;
        }
